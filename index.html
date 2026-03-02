@@ -43,9 +43,9 @@
 
 <div class="card">
 <h3>5️⃣ Join Levels</h3>
-<button onclick="joinLevel(2)">joinLevel2()</button>
-<button onclick="joinLevel(3)">joinLevel3()</button>
-<button onclick="joinLevel(4)">joinLevel4()</button>
+<button onclick="joinLevel(2)">joinLevel 2</button>
+<button onclick="joinLevel(3)">joinLevel 3</button>
+<button onclick="joinLevel(4)">joinLevel 4</button>
 </div>
 
 <div class="card">
@@ -196,9 +196,9 @@ async function joinLevel(level){
 
 if(!checkConnection()) return;
 
-if(level === 2) handleTransaction(referralContract.join Level2);
-if(level === 3) handleTransaction(referralContract.join Level3);
-if(level === 4) handleTransaction(referralContract.join Level4);
+if(level === 2) handleTransaction(referralContract.joinLevel2());
+if(level === 3) handleTransaction(referralContract.joinLevel3());
+if(level === 4) handleTransaction(referralContract.joinLevel4());
 }
 
 </script>
