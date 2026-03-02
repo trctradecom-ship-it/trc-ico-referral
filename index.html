@@ -1,122 +1,146 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>TRC Referral ICO</title>
+<title>Tradecom Referral Levels</title>
+
 <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
 
 <style>
 body{
-background:#111;
+background:black;
 color:white;
 font-family:Arial;
 text-align:center;
-padding-top:70px;
+padding-top:50px;
 }
+
 button{
-padding:12px;
+padding:12px 20px;
 margin:10px;
+font-size:16px;
+background:gold;
+border:none;
+cursor:pointer;
 }
+
 input{
 padding:10px;
-width:240px;
+font-size:16px;
+margin:10px;
 }
 </style>
 </head>
 
 <body>
 
-<h1>Referral ICO</h1>
+<h1>Tradecom Referral ICO</h1>
+
+<p id="refDisplay"></p>
 
 <button onclick="connectWallet()">Connect Wallet</button>
 
 <br><br>
 
-<input id="ref" placeholder="Referral Address">
+<input id="refAddress" placeholder="Enter Referral Address">
 
 <br>
 
-<button onclick="register()">Register</button>
+<button onclick="registerUser()">Register</button>
 
-<br><br>
+<hr style="margin:40px;">
 
-<input id="pol" placeholder="POL Amount">
+<h2>Levels</h2>
 
+<button onclick="buyLevel1()">Buy Level 1 (Payable)</button>
 <br>
-
-<button onclick="deposit()">Deposit POL</button>
-
+<button onclick="joinLevel2()">Join Level 2</button>
 <br>
-
-<button onclick="buyLevel()">Buy Level 1</button>
+<button onclick="joinLevel3()">Join Level 3</button>
+<br>
+<button onclick="joinLevel4()">Join Level 4</button>
 
 <script>
 
+let provider;
 let signer;
+let contract;
 
-const contractAddress=
+const contractAddress =
 "0xdc1D39272E54590ce404791FaDc431Ca27821F3a";
 
-const abi=[
+const abi = [
 {"inputs":[{"internalType":"address","name":"_upline","type":"address"}],"name":"register","outputs":[],"stateMutability":"nonpayable","type":"function"},
-{"inputs":[],"name":"depositPOL","outputs":[],"stateMutability":"payable","type":"function"},
-{"inputs":[],"name":"buyLevel1","outputs":[],"stateMutability":"payable","type":"function"}
+{"inputs":[],"name":"buyLevel1","outputs":[],"stateMutability":"payable","type":"function"},
+{"inputs":[],"name":"joinLevel2","outputs":[],"stateMutability":"nonpayable","type":"function"},
+{"inputs":[],"name":"joinLevel3","outputs":[],"stateMutability":"nonpayable","type":"function"},
+{"inputs":[],"name":"joinLevel4","outputs":[],"stateMutability":"nonpayable","type":"function"}
 ];
 
 async function connectWallet(){
 
-await window.ethereum.request({method:'eth_requestAccounts'});
+if(!window.ethereum){
+alert("Install MetaMask");
+return;
+}
 
-const provider =
-new ethers.providers.Web3Provider(window.ethereum);
+await window.ethereum.request({method:"eth_requestAccounts"});
 
+provider = new ethers.providers.Web3Provider(window.ethereum);
 signer = provider.getSigner();
+contract = new ethers.Contract(contractAddress, abi, signer);
 
 alert("Wallet Connected");
 }
 
-async function register(){
+async function registerUser(){
 
-const ref=document.getElementById("ref").value;
+const ref = document.getElementById("refAddress").value;
 
-const contract=
-new ethers.Contract(contractAddress,abi,signer);
+if(!ref){
+alert("Enter Referral Address");
+return;
+}
 
-const tx=await contract.register(ref);
-
+const tx = await contract.register(ref);
 await tx.wait();
 
 alert("Registered Successfully");
 }
 
-async function deposit(){
+async function buyLevel1(){
 
-const amount=document.getElementById("pol").value;
-
-const contract=
-new ethers.Contract(contractAddress,abi,signer);
-
-const tx=await contract.depositPOL({
-value:ethers.utils.parseEther(amount)
-});
-
-await tx.wait();
-
-alert("Deposit Successful");
-}
-
-async function buyLevel(){
-
-const contract=
-new ethers.Contract(contractAddress,abi,signer);
-
-const tx=await contract.buyLevel1({
-value:ethers.utils.parseEther("0.01")
+// CHANGE VALUE IF NEEDED
+const tx = await contract.buyLevel1({
+value: ethers.utils.parseEther("0.01")
 });
 
 await tx.wait();
 
 alert("Level 1 Purchased");
+}
 
+async function joinLevel2(){
+
+const tx = await contract.joinLevel2();
+await tx.wait();
+
+alert("Joined Level 2");
+}
+
+async function joinLevel3(){
+
+const tx = await contract.joinLevel3();
+await tx.wait();
+
+alert("Joined Level 3");
+}
+
+async function joinLevel4(){
+
+const tx = await contract.joinLevel4();
+await tx.wait();
+
+alert("Joined Level 4");
 }
 
 </script>
