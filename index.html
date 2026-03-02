@@ -5,43 +5,49 @@
 
 <link rel="stylesheet" href="style.css">
 
-<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
-</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
 
+</head>
 <body>
 
 <div class="container">
 
-<h1>Tradecom Referral Dashboard</h1>
+<h1>Tradecom Referral Contract</h1>
 
 <div class="card">
-<button onclick="connectWallet()">Connect Wallet</button>
-<p id="walletAddress"></p>
+<h3>1️⃣ Connect Wallet</h3>
+<button onclick="connectWallet()">Connect</button>
+<p id="wallet"></p>
 </div>
 
 <div class="card">
-<h3>Register With Referral</h3>
+<h3>2️⃣ Register (register(address _upline))</h3>
 <input id="refAddress" placeholder="Enter Referral Address">
-<button onclick="registerUser()">Register</button>
+<button onclick="registerUser()">Write</button>
 </div>
 
 <div class="card">
-<h3>Buy Level 1 (POL Required)</h3>
-<input id="level1Amount" placeholder="Enter POL Amount (example: 0.1)">
-<button onclick="buyLevel1()">Buy Level 1</button>
+<h3>3️⃣ Buy Level 1 (buyLevel1() payable)</h3>
+<input id="levelAmount" placeholder="Enter POL Amount">
+<button onclick="buyLevel1()">Write</button>
 </div>
 
 <div class="card">
-<h3>Approve TRC Token</h3>
+<h3>4️⃣ Approve TRC (approve)</h3>
 <input id="approveAmount" placeholder="Enter TRC Amount">
-<button onclick="approveTRC()">Approve TRC</button>
+<button onclick="approveTRC()">Write</button>
 </div>
 
 <div class="card">
-<h3>Activate Levels</h3>
-<button onclick="joinLevel(2)">Join Level 2</button>
-<button onclick="joinLevel(3)">Join Level 3</button>
-<button onclick="joinLevel(4)">Join Level 4</button>
+<h3>5️⃣ Join Levels</h3>
+<button onclick="joinLevel(2)">joinLevel2()</button>
+<button onclick="joinLevel(3)">joinLevel3()</button>
+<button onclick="joinLevel(4)">joinLevel4()</button>
+</div>
+
+<div class="card">
+<h3>Transaction Status</h3>
+<p id="status"></p>
 </div>
 
 </div>
@@ -52,11 +58,10 @@ let provider;
 let signer;
 let referralContract;
 let tokenContract;
+let connected = false;
 
 const referralAddress = "0xdc1D39272E54590ce404791FaDc431Ca27821F3a";
 const tokenAddress = "0xc08983be707bf4b763e7A0f3cCAD3fd00af6620d";
-
-/* ===== CONTRACT ABI ===== */
 
 const referralABI = [
 {"inputs":[{"internalType":"address","name":"_upline","type":"address"}],"name":"register","outputs":[],"stateMutability":"nonpayable","type":"function"},
@@ -71,7 +76,17 @@ const tokenABI = [
 {"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function"}
 ];
 
-/* ===== CONNECT WALLET ===== */
+function updateStatus(message){
+document.getElementById("status").innerHTML = message;
+}
+
+function checkConnection(){
+if(!connected){
+alert("Connect Wallet First");
+return false;
+}
+return true;
+}
 
 async function connectWallet(){
 
@@ -85,120 +100,102 @@ await ethereum.request({method:'eth_requestAccounts'});
 provider = new ethers.providers.Web3Provider(window.ethereum);
 signer = provider.getSigner();
 
-const userAddress = await signer.getAddress();
-document.getElementById("walletAddress").innerText = "Connected: " + userAddress;
+const address = await signer.getAddress();
+document.getElementById("wallet").innerText = "Connected: " + address;
 
 referralContract = new ethers.Contract(referralAddress, referralABI, signer);
 tokenContract = new ethers.Contract(tokenAddress, tokenABI, signer);
 
-alert("Wallet Connected");
+connected = true;
+
+updateStatus("Wallet Connected ✅");
 }
 
-/* ===== REGISTER ===== */
+async function handleTransaction(txPromise){
+
+try{
+
+const tx = await txPromise;
+
+updateStatus(`
+Transaction Sent ✅<br>
+Hash: <a target="_blank" href="https://polygonscan.com/tx/${tx.hash}">${tx.hash}</a><br>
+Waiting for confirmation...
+`);
+
+await tx.wait();
+
+updateStatus(`
+Transaction Confirmed ✅<br>
+<a target="_blank" href="https://polygonscan.com/tx/${tx.hash}">View on PolygonScan</a>
+`);
+
+}catch(error){
+updateStatus("Error ❌ " + error.message);
+}
+
+}
 
 async function registerUser(){
 
-try{
+if(!checkConnection()) return;
 
 const ref = document.getElementById("refAddress").value;
 
 if(!ethers.utils.isAddress(ref)){
-alert("Invalid Referral Address");
+alert("Invalid Address");
 return;
 }
 
-const tx = await referralContract.register(ref);
-alert("Transaction Sent...");
-
-await tx.wait();
-alert("Registered Successfully");
-
-}catch(error){
-alert(error.message);
+handleTransaction(referralContract.register(ref));
 }
-
-}
-
-/* ===== BUY LEVEL 1 ===== */
 
 async function buyLevel1(){
 
-try{
+if(!checkConnection()) return;
 
-const amount = document.getElementById("level1Amount").value;
+const amount = document.getElementById("levelAmount").value;
 
 if(!amount){
 alert("Enter POL amount");
 return;
 }
 
-const tx = await referralContract.buyLevel1({
+handleTransaction(
+referralContract.buyLevel1({
 value: ethers.utils.parseEther(amount)
-});
-
-alert("Transaction Sent...");
-await tx.wait();
-
-alert("Level 1 Activated");
-
-}catch(error){
-alert(error.message);
+})
+);
 }
-
-}
-
-/* ===== APPROVE TOKEN ===== */
 
 async function approveTRC(){
 
-try{
+if(!checkConnection()) return;
 
 const amount = document.getElementById("approveAmount").value;
 
 if(!amount){
-alert("Enter TRC amount");
+alert("Enter amount");
 return;
 }
 
 const decimals = await tokenContract.decimals();
 
-const tx = await tokenContract.approve(
+handleTransaction(
+tokenContract.approve(
 referralAddress,
 ethers.utils.parseUnits(amount, decimals)
+)
 );
-
-alert("Approval Sent...");
-await tx.wait();
-
-alert("TRC Approved");
-
-}catch(error){
-alert(error.message);
 }
-
-}
-
-/* ===== JOIN LEVELS ===== */
 
 async function joinLevel(level){
 
-try{
+if(!checkConnection()) return;
 
-let tx;
-
-if(level === 2) tx = await referralContract.joinLevel2();
-if(level === 3) tx = await referralContract.joinLevel3();
-if(level === 4) tx = await referralContract.joinLevel4();
-
-alert("Transaction Sent...");
-await tx.wait();
-
-alert("Level " + level + " Activated");
-
-}catch(error){
-alert(error.message);
-}
-
+if(level === 2) handleTransaction(referralContract.joinLevel2());
+if(level === 3) handleTransaction(referralContract.joinLevel3());
+if(level === 4) handleTransaction(referralContract.joinLevel4());
 }
 
 </script>
