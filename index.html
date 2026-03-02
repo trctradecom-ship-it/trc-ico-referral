@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>TRC Referral ICO</title>
+<script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
+
+<style>
+body{
+background:#111;
+color:white;
+font-family:Arial;
+text-align:center;
+padding-top:70px;
+}
+button{
+padding:12px;
+margin:10px;
+}
+input{
+padding:10px;
+width:240px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Referral ICO</h1>
+
+<button onclick="connectWallet()">Connect Wallet</button>
+
+<br><br>
+
+<input id="ref" placeholder="Referral Address">
+
+<br>
+
+<button onclick="register()">Register</button>
+
+<br><br>
+
+<input id="pol" placeholder="POL Amount">
+
+<br>
+
+<button onclick="deposit()">Deposit POL</button>
+
+<br>
+
+<button onclick="buyLevel()">Buy Level 1</button>
+
+<script>
+
+let signer;
+
+const contractAddress=
+"0xdc1D39272E54590ce404791FaDc431Ca27821F3a";
+
+const abi=[
+{"inputs":[{"internalType":"address","name":"_upline","type":"address"}],"name":"register","outputs":[],"stateMutability":"nonpayable","type":"function"},
+{"inputs":[],"name":"depositPOL","outputs":[],"stateMutability":"payable","type":"function"},
+{"inputs":[],"name":"buyLevel1","outputs":[],"stateMutability":"payable","type":"function"}
+];
+
+async function connectWallet(){
+
+await window.ethereum.request({method:'eth_requestAccounts'});
+
+const provider =
+new ethers.providers.Web3Provider(window.ethereum);
+
+signer = provider.getSigner();
+
+alert("Wallet Connected");
+}
+
+async function register(){
+
+const ref=document.getElementById("ref").value;
+
+const contract=
+new ethers.Contract(contractAddress,abi,signer);
+
+const tx=await contract.register(ref);
+
+await tx.wait();
+
+alert("Registered Successfully");
+}
+
+async function deposit(){
+
+const amount=document.getElementById("pol").value;
+
+const contract=
+new ethers.Contract(contractAddress,abi,signer);
+
+const tx=await contract.depositPOL({
+value:ethers.utils.parseEther(amount)
+});
+
+await tx.wait();
+
+alert("Deposit Successful");
+}
+
+async function buyLevel(){
+
+const contract=
+new ethers.Contract(contractAddress,abi,signer);
+
+const tx=await contract.buyLevel1({
+value:ethers.utils.parseEther("0.01")
+});
+
+await tx.wait();
+
+alert("Level 1 Purchased");
+
+}
+
+</script>
+
+</body>
+</html>
