@@ -236,3 +236,20 @@ box-shadow:0 0 14px rgba(255,215,0,0.7), 0 0 28px rgba(255,215,0,0.35);
 button:active{
 box-shadow:0 0 8px rgba(255,215,0,0.6) inset;
 }
+
+/* ===== LAPTOP BRIGHT GOLD FIX ===== */
+
+@media (min-width:1024px){
+
+button{
+background:linear-gradient(135deg,#a87900,#ffd700,#fff3a0);
+border:1px solid #ffd700;
+color:#1a1a1a;
+}
+
+button:hover{
+background:linear-gradient(135deg,#c69200,#ffe347,#fff7c7);
+box-shadow:0 0 16px rgba(255,215,0,0.75);
+}
+
+}
