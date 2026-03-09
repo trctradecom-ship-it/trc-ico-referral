@@ -103,3 +103,67 @@ font-size: 15px;
 }
 
 }
+
+/* ===== BOX FIX FOR MOBILE + LAPTOP ===== */
+
+.container {
+width: 100%;
+box-sizing: border-box;
+}
+
+.card {
+overflow: hidden;
+box-sizing: border-box;
+}
+
+input {
+width: 100%;
+box-sizing: border-box;
+max-width: 100%;
+}
+
+button {
+width: 100%;
+box-sizing: border-box;
+max-width: 100%;
+}
+
+/* MOBILE SAFETY */
+@media (max-width: 480px) {
+
+.container{
+padding:15px;
+}
+
+.card{
+padding:16px;
+}
+
+input{
+width:100%;
+}
+
+button{
+width:100%;
+}
+
+}
+
+/* LAPTOP SAFETY */
+@media (min-width: 768px){
+
+.container{
+max-width:700px;
+margin:auto;
+}
+
+input{
+width:100%;
+}
+
+button{
+width:100%;
+}
+
+}
+
