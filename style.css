@@ -167,57 +167,50 @@ width:100%;
 
 }
 
-/* ===== ULTRA RICH GOLD BUTTON STYLE ===== */
+
+/* ===== ULTRA BRIGHT GOLD BUTTON ===== */
 
 button{
-background:linear-gradient(145deg,#6e4b00,#b88900,#ffd700);
+background:linear-gradient(135deg,#7a5200,#ffd700,#ffea00);
 color:#111;
-border:1px solid #cfae2b;
+border:1px solid #f5d76e;
 border-radius:8px;
 font-weight:600;
-transition:all .25s ease;
 position:relative;
 overflow:hidden;
+transition:background .25s ease, box-shadow .25s ease;
 }
 
-/* GOLD SHINE EFFECT */
+/* SHINE EFFECT */
 
 button::before{
 content:"";
 position:absolute;
 top:0;
-left:-120%;
+left:-150%;
 width:60%;
 height:100%;
-background:linear-gradient(120deg,transparent,rgba(255,255,255,0.7),transparent);
-transition:all .6s ease;
+background:linear-gradient(120deg,transparent,rgba(255,255,255,0.9),transparent);
+transition:left .6s ease;
 }
 
-/* HOVER */
+/* HOVER SHINE */
 
 button:hover{
-background:linear-gradient(145deg,#7a5200,#d4a800,#ffe27a);
-box-shadow:0 6px 20px rgba(255,215,0,0.45);
-transform:translateY(-2px);
+background:linear-gradient(135deg,#8a5a00,#ffe100,#fff066);
+box-shadow:0 0 18px rgba(255,215,0,0.7);
 }
 
 button:hover::before{
-left:140%;
+left:160%;
 }
 
-/* CLICK */
-
-button:active{
-transform:scale(0.97);
-box-shadow:0 3px 10px rgba(0,0,0,0.35);
-}
-
-/* MOBILE ADJUST */
+/* MOBILE */
 
 @media(max-width:768px){
 button{
-font-size:14px;
 padding:11px;
+font-size:14px;
 }
 }
 
