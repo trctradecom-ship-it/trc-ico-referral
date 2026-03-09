@@ -194,16 +194,6 @@ background:linear-gradient(120deg,transparent,rgba(255,255,255,0.9),transparent)
 transition:left .6s ease;
 }
 
-/* HOVER SHINE */
-
-button:hover{
-background:linear-gradient(135deg,#8a5a00,#ffe100,#fff066);
-box-shadow:0 0 18px rgba(255,215,0,0.7);
-}
-
-button:hover::before{
-left:160%;
-}
 
 /* MOBILE */
 
@@ -220,4 +210,29 @@ font-size:14px;
 button{
 padding:12px 18px;
 }
+}
+
+
+/* ===== RICH ULTRA GOLD BUTTON ===== */
+
+button{
+background:linear-gradient(135deg,#8c6a00,#ffd700,#fff1a8);
+color:#1a1a1a;
+border:1px solid #e6c200;
+border-radius:8px;
+font-weight:600;
+transition:background .25s ease, box-shadow .25s ease;
+}
+
+/* BRIGHT HOVER GLOW (NO MOVEMENT) */
+
+button:hover{
+background:linear-gradient(135deg,#a67c00,#ffe347,#fff6c9);
+box-shadow:0 0 14px rgba(255,215,0,0.7), 0 0 28px rgba(255,215,0,0.35);
+}
+
+/* CLICK */
+
+button:active{
+box-shadow:0 0 8px rgba(255,215,0,0.6) inset;
 }
