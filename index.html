@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 
@@ -53,6 +53,13 @@
 <p id="status"></p>
 </div>
 
+<!-- ✅ ADDED THIS -->
+<div class="card">
+<h3>6️⃣ My Info</h3>
+<button onclick="getMyInfo()">Show My Info</button>
+<p id="myInfo"></p>
+</div>
+
 </div>
 
 <script>
@@ -71,7 +78,19 @@ const referralABI = [
 {"inputs":[],"name":"buyLevel1","outputs":[],"stateMutability":"payable","type":"function"},
 {"inputs":[],"name":"joinLevel2","outputs":[],"stateMutability":"nonpayable","type":"function"},
 {"inputs":[],"name":"joinLevel3","outputs":[],"stateMutability":"nonpayable","type":"function"},
-{"inputs":[],"name":"joinLevel4","outputs":[],"stateMutability":"nonpayable","type":"function"}
+{"inputs":[],"name":"joinLevel4","outputs":[],"stateMutability":"nonpayable","type":"function"},
+
+// ✅ ADDED THIS ABI
+{"inputs":[{"internalType":"address","name":"","type":"address"}],
+"name":"users",
+"outputs":[
+{"internalType":"bool","name":"registered","type":"bool"},
+{"internalType":"address","name":"upline","type":"address"},
+{"internalType":"uint8","name":"level","type":"uint8"}
+],
+"stateMutability":"view",
+"type":"function"}
+
 ];
 
 const tokenABI = [
@@ -199,6 +218,27 @@ if(!checkConnection()) return;
 if(level === 2) handleTransaction(referralContract.joinLevel2());
 if(level === 3) handleTransaction(referralContract.joinLevel3());
 if(level === 4) handleTransaction(referralContract.joinLevel4());
+}
+
+// ✅ ADDED FUNCTION
+async function getMyInfo(){
+
+if(!checkConnection()) return;
+
+try{
+
+const addr = await signer.getAddress();
+const user = await referralContract.users(addr);
+
+document.getElementById("myInfo").innerHTML = `
+Upline: ${user.upline} <br>
+Level: ${user.level}
+`;
+
+}catch(e){
+updateStatus("Error ❌ " + e.message);
+}
+
 }
 
 </script>
