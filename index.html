@@ -142,30 +142,27 @@ updateStatus("Wallet Connected ✅");
 }
 
 async function handleTransaction(txPromise){
+    try{
+        document.getElementById("status").innerHTML =
+          `<span class="tx-pending">⏳ Waiting for confirmation...</span>`;
 
-try{
+        const tx = await txPromise;
 
-const tx = await txPromise;
+        document.getElementById("status").innerHTML =
+          `<a href="https://polygonscan.com/tx/${tx.hash}" target="_blank">
+            🔄 Transaction Pending (View)
+          </a>`;
 
-updateStatus(`
-Transaction Sent ✅<br>
-Hash: <a target="_blank" href="https://polygonscan.com/tx/${tx.hash}">${tx.hash}</a><br>
-Waiting for confirmation...
-`);
+        await tx.wait();
 
-await tx.wait();
+        document.getElementById("status").innerHTML =
+          `<span class="tx-success">✅ Transaction Confirmed</span>`;
 
-updateStatus(`
-Transaction Confirmed ✅<br>
-<a target="_blank" href="https://polygonscan.com/tx/${tx.hash}">View on PolygonScan</a>
-`);
-
-}catch(error){
-updateStatus("Error ❌ " + error.message);
+    }catch(e){
+        document.getElementById("status").innerHTML =
+          `<span class="tx-fail">❌ Transaction Failed</span>`;
+    }
 }
-
-}
-
 async function registerUser(){
 
 if(!checkConnection()) return;
