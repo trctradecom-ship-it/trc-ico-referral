@@ -256,15 +256,12 @@ box-shadow:0 0 16px rgba(255,215,0,0.75);
 
 
 
-
-
-
 /* Mobile-only link color override */
 @media only screen and (max-width: 768px) {
     #status a {
         color: gold !important;
         text-decoration: underline; /* optional for visibility */
-    }
+    }  
 }
 
 
