@@ -270,5 +270,7 @@ box-shadow:0 0 16px rgba(255,215,0,0.75);
 
 
 
-
+.tx-pending { color: orange; }
+.tx-success { color: green; }
+.tx-fail { color: red; }
 
