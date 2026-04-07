@@ -163,19 +163,26 @@ async function handleTransaction(txPromise){
           `<span class="tx-fail">❌ Transaction Failed</span>`;
     }
 }
+
 async function registerUser(){
 
 if(!checkConnection()) return;
 
 const ref = document.getElementById("refAddress").value;
+const userAddr = await signer.getAddress();
 
 if(!ethers.utils.isAddress(ref)){
 alert("Invalid Address");
 return;
 }
 
-handleTransaction(referralContract.register(ref));
+if(ref.toLowerCase() === userAddr.toLowerCase()){
+alert("You cannot refer yourself");
+return;
 }
+
+handleTransaction(referralContract.register(ref));
+}  
 
 async function buyLevel1(){
 
@@ -246,6 +253,46 @@ updateStatus("Error ❌ " + e.message);
 
 }
 
+async function getMyReferralLink(){
+
+if(!checkConnection()) return;
+
+const addr = await signer.getAddress();
+
+// ✅ GitHub Pages safe link
+const cleanURL = window.location.origin + window.location.pathname;
+
+const link = cleanURL + "?ref=" + addr;
+
+navigator.clipboard.writeText(link);
+
+alert("Referral link copied:\n" + link);
+}
+
+
+
+// ================= AUTO REFERRAL FROM URL =================
+window.onload = function(){
+
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get("ref");
+
+    if(ref && ethers.utils.isAddress(ref)){
+        const input = document.getElementById("refAddress");
+
+        if(input){
+            input.value = ref;
+            input.readOnly = true; // 🔥 lock input
+        }
+
+        document.getElementById("status").innerText =
+          "Referral detected ✅";
+    }
+};
+
+
+
+  
 </script>
 
 </body>
