@@ -15,18 +15,26 @@ padding: 20px;
 
 /* ===== TITLE ===== */
 h1 {
-text-align: center;
-font-size: 24px;
-margin-bottom: 25px;
-background: linear-gradient(
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 25px;
+    display: inline-block;
+
+    /* Fallback gold */
+    color: #ffd700;
+
+    /* Premium gold + yellow gradient */
+    background: linear-gradient(
         90deg,
-        #ffd700 0%,     /* Gold 70% */
-        #ffcc00 70%,
-        #fff176 100%    /* Premium yellow 30% */
+        #b8860b 0%,
+        #ffd700 40%,
+        #ffea00 70%,
+        #fff59d 100%
     );
+
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-clip: text;   
+    background-clip: text;
 }
 
 /* ===== CARD DESIGN ===== */
