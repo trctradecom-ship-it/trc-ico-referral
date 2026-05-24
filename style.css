@@ -16,9 +16,17 @@ padding: 20px;
 /* ===== TITLE ===== */
 h1 {
 text-align: center;
-color: gold;
 font-size: 24px;
 margin-bottom: 25px;
+background: linear-gradient(
+        90deg,
+        #ffd700 0%,     /* Gold 70% */
+        #ffcc00 70%,
+        #fff176 100%    /* Premium yellow 30% */
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;   
 }
 
 /* ===== CARD DESIGN ===== */
