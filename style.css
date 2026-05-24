@@ -14,27 +14,28 @@ padding: 20px;
 }
 
 /* ===== TITLE ===== */
-h1 {
-    text-align: center;
-    font-size: 24px;
-    margin-bottom: 25px;
-    display: inline-block;
+/* ===== TITLE ===== */
+h1{
+    text-align:center;
+    font-size:24px;
+    margin-bottom:25px;
 
-    /* Fallback gold */
-    color: #ffd700;
-
-    /* Premium gold + yellow gradient */
-    background: linear-gradient(
+    /* Premium Gold */
+    background:linear-gradient(
         90deg,
-        #b8860b 0%,
-        #ffd700 40%,
+        #8c6a00 0%,
+        #ffd700 35%,
         #ffea00 70%,
-        #fff59d 100%
+        #fff6b0 100%
     );
 
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color:transparent !important;
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent !important;
+
+    display:block;
+    width:100%;
 }
 
 /* ===== CARD DESIGN ===== */
